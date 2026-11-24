@@ -1,8 +1,4 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
-class Notification extends Model {
-    protected $guarded = [];
-    protected $casts = ['read_at' => 'datetime'];
-}
+class Notification extends Model { protected $guarded = []; protected $casts = ['read_at' => 'datetime']; }

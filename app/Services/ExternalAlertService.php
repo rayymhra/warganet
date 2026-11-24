@@ -20,8 +20,7 @@ class ExternalAlertService {
             $g = $res->json('Infogempa.gempa');
             if (!$res->successful() || !$g || empty($g['DateTime'])) return false;
             ExternalAlert::updateOrCreate(['external_id' => 'bmkg-' . $g['DateTime']], [
-                'source_name' => 'BMKG',
-                'title' => "Gempa M{$g['Magnitude']} - {$g['Wilayah']}",
+                'source_name' => 'BMKG', 'title' => "Gempa M{$g['Magnitude']} - {$g['Wilayah']}",
                 'description' => "Kedalaman {$g['Kedalaman']}, potensi: {$g['Potensi']}. Dirasakan: " . ($g['Dirasakan'] ?? '-'),
                 'category' => 'earthquake', 'location' => $g['Wilayah'], 'source_url' => 'https://www.bmkg.go.id',
                 'published_at' => $g['DateTime'], 'fetched_at' => now(), 'status' => 'active']);

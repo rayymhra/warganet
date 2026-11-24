@@ -13,9 +13,7 @@ class ReportController extends Controller {
             'notes' => Notification::where('user_id', $u->id)->latest()->limit(10)->get(),
         ]);
     }
-
     public function create() { return view('resident.create'); }
-
     public function store(Request $r, AiClassificationService $ai) {
         $d = $r->validate([
             'title' => 'required|max:150', 'description' => 'required|min:10', 'location' => 'required|max:255',
@@ -27,13 +25,11 @@ class ReportController extends Controller {
         unset($d['image']);
         $d['user_id'] = $r->user()->id;
         $d['verification_status'] = 'pending'; // never auto-published
-
         if ($res = $ai->classify($d['description'], $d['location'])) { // report is saved even if AI is down
             $d['category'] = $d['category'] ?? $res['category'];
-            $d['ai_confidence'] = $res['confidence'];
-            $d['ai_severity'] = $res['severity'];
+            $d['ai_confidence'] = $res['confidence']; $d['ai_severity'] = $res['severity'];
         }
         IncidentReport::create($d);
-        return redirect('/resident/dashboard')->with('ok', 'Report submitted. An administrator will review it before it is published.');
+        return redirect('/resident/dashboard')->with('ok', 'Laporan terkirim. Admin akan memeriksa dulu sebelum laporan ditampilkan ke warga.');
     }
 }

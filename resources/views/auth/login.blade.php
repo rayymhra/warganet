@@ -1,7 +1,7 @@
 @extends('layouts.app') @section('content')
-<div class="card mx-auto p-4" style="max-width:420px"><h4>Login</h4>
+<div class="card mx-auto p-4" style="max-width:440px"><h3>Masuk</h3><p class="text-muted">Masuk untuk membuat laporan atau mengelola informasi.</p>
 <form method="post" action="/login">@csrf
-<input class="form-control mb-2" name="email" type="email" placeholder="Email" value="{{ old('email') }}" required>
-<input class="form-control mb-3" name="password" type="password" placeholder="Password" required>
-<button class="btn btn-primary w-100">Login</button></form>
-<a class="small mt-3" href="/register">Create a resident account</a></div>@endsection
+<label class="form-label">Email</label><input class="form-control mb-3" name="email" type="email" value="{{ old('email') }}" required>
+<label class="form-label">Kata sandi</label><input class="form-control mb-3" name="password" type="password" required>
+<button class="btn btn-primary w-100 btn-lg">Masuk</button></form>
+<p class="mt-3 mb-0">Belum punya akun? <a href="/register">Daftar di sini</a></p></div>@endsection

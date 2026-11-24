@@ -7,8 +7,7 @@ class DashboardController extends Controller {
     public function index() {
         return view('admin.dashboard', [
             'stats' => [
-                'Residents' => User::where('role', 'resident')->count(),
-                'Schedules' => Schedule::count(),
+                'Residents' => User::where('role', 'resident')->count(), 'Schedules' => Schedule::count(),
                 'Announcements' => Announcement::count(),
                 'Pending reports' => IncidentReport::where('verification_status', 'pending')->count(),
                 'Verified / active alerts' => IncidentReport::where('verification_status', 'verified')->count(),

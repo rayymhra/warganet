@@ -14,8 +14,7 @@ class AiClassificationService {
                     compact('description', 'location'));
             $d = $res->json();
             if (!$res->successful() || !in_array($d['category'] ?? null, self::CATEGORIES, true)) return null;
-            return ['category' => $d['category'],
-                    'confidence' => isset($d['confidence']) ? (float) $d['confidence'] : null,
+            return ['category' => $d['category'], 'confidence' => isset($d['confidence']) ? (float) $d['confidence'] : null,
                     'severity' => $d['severity'] ?? null];
         } catch (\Throwable $e) {
             Log::warning('AI classification failed: ' . $e->getMessage());

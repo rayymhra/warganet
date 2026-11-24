@@ -1,18 +1,18 @@
 @extends('layouts.app') @section('content')
-<h3>Emergency Alerts</h3><div id="map" class="mb-4"></div>
-<h5>Community alerts <span class="badge bg-success">Verified by administrator</span></h5>
+@php $inc = config('warganet.incident'); @endphp
+<h3>🚨 Info Darurat</h3><div id="map" class="mb-4"></div>
+<h5>Laporan warga <span class="badge bg-success">Sudah diperiksa admin</span></h5>
 @forelse($community as $r)<div class="card p-3 mb-2 border-start border-danger border-4"><b>{{ $r->title }}</b>
-<div class="text-muted small">{{ str_replace('_',' ',$r->category) }} · {{ $r->location }} · {{ ($r->occurred_at ?? $r->created_at)->format('d M Y H:i') }} · Source: community report @if($r->ai_severity)· severity: {{ $r->ai_severity }}@endif</div>
-<div>{{ $r->description }}</div></div>
-@empty<p class="text-muted">No verified community alerts.</p>@endforelse
+<div class="text-muted small">{{ $inc[$r->category] ?? 'Lainnya' }} · 📍 {{ $r->location }} · {{ ($r->occurred_at ?? $r->created_at)->translatedFormat('d F Y H:i') }} · Sumber: laporan warga</div>
+<div class="mt-1">{{ $r->description }}</div></div>
+@empty<div class="alert alert-light">Belum ada laporan terverifikasi.</div>@endforelse
 
-<h5 class="mt-4">Official external information <span class="badge bg-secondary">Not reviewed by neighborhood admins</span></h5>
+<h5 class="mt-4">Informasi resmi dari instansi <span class="badge bg-secondary">Bukan hasil pemeriksaan admin RT/RW</span></h5>
 @forelse($external as $e)<div class="card p-3 mb-2"><b>{{ $e->title }}</b>
-<div class="text-muted small">Source: {{ $e->source_name }} · published {{ $e->published_at?->format('d M Y H:i') }} · last retrieved {{ $e->fetched_at->diffForHumans() }}
-@if($e->isStale())<span class="badge bg-warning text-dark">Outdated — source may be unavailable</span>@endif</div>
-<div>{{ $e->description }}</div>
-@if($e->source_url)<a class="small" href="{{ $e->source_url }}" target="_blank" rel="noopener">Original source</a>@endif</div>
-@empty<p class="text-muted">External data currently unavailable.</p>@endforelse
+<div class="text-muted small">Sumber: {{ $e->source_name }} · terbit {{ $e->published_at?->translatedFormat('d F Y H:i') }} · diambil {{ $e->fetched_at->diffForHumans() }}
+@if($e->isStale())<span class="badge bg-warning text-dark">Data mungkin sudah lama</span>@endif</div>
+<div class="mt-1">{{ $e->description }}</div>@if($e->source_url)<a class="small" href="{{ $e->source_url }}" target="_blank" rel="noopener">Lihat sumber asli</a>@endif</div>
+@empty<div class="alert alert-light">Informasi resmi sedang tidak tersedia.</div>@endforelse
 @endsection
 @push('js')<script>
 const m=L.map('map').setView([-6.9,107.0],11);

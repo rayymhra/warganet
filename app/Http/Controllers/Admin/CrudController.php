@@ -5,44 +5,56 @@ use App\Models\{Schedule, Announcement, Business};
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-/** One controller for schedules, announcements and businesses. */
 class CrudController extends Controller {
-    const R = [
-        'schedules' => [Schedule::class, [
-            'title' => 'required|max:150', 'category' => 'required|max:60', 'description' => 'nullable',
-            'date' => 'required|date', 'start_time' => 'required', 'end_time' => 'nullable',
-            'location' => 'required|max:255', 'status' => 'required|in:published,cancelled']],
-        'announcements' => [Announcement::class, [
-            'title' => 'required|max:150', 'category' => 'required|max:60', 'content' => 'required',
-            'status' => 'required|in:draft,published']],
-        'businesses' => [Business::class, [
-            'name' => 'required|max:150', 'category' => 'required|max:60', 'description' => 'required',
-            'address' => 'required', 'phone' => 'nullable|max:30', 'operating_hours' => 'nullable',
-            'status' => 'required|in:published,unpublished']],
-    ];
+    // field => [label, aturan validasi, tipe input]
+    private function cfg(string $res): array {
+        $all = [
+            'schedules' => ['model' => Schedule::class, 'title' => 'Jadwal', 'cats' => 'schedule_categories',
+                'status' => ['published' => 'Terbit', 'cancelled' => 'Dibatalkan'],
+                'fields' => ['title' => ['Judul kegiatan', 'required|max:150', 'text'], 'description' => ['Keterangan', 'nullable', 'textarea'],
+                    'date' => ['Tanggal', 'required|date', 'date'], 'start_time' => ['Jam mulai', 'required', 'time'],
+                    'end_time' => ['Jam selesai (boleh kosong)', 'nullable', 'time'], 'location' => ['Tempat', 'required|max:255', 'text']]],
+            'announcements' => ['model' => Announcement::class, 'title' => 'Pengumuman', 'cats' => 'announcement_categories',
+                'status' => ['published' => 'Terbit', 'draft' => 'Draf (belum tampil)'],
+                'fields' => ['title' => ['Judul pengumuman', 'required|max:150', 'text'], 'content' => ['Isi pengumuman', 'required', 'textarea']]],
+            'businesses' => ['model' => Business::class, 'title' => 'Usaha Warga', 'cats' => 'business_categories',
+                'status' => ['published' => 'Tampil', 'unpublished' => 'Disembunyikan'],
+                'fields' => ['name' => ['Nama usaha', 'required|max:150', 'text'], 'description' => ['Deskripsi usaha', 'required', 'textarea'],
+                    'address' => ['Alamat', 'required', 'textarea'], 'phone' => ['No. WhatsApp / telepon', 'nullable|max:30', 'text'],
+                    'operating_hours' => ['Jam buka', 'nullable', 'text']]],
+        ];
+        abort_unless(isset($all[$res]), 404);
+        return $all[$res];
+    }
 
-    private function cfg(string $res) { abort_unless(isset(self::R[$res]), 404); return self::R[$res]; }
+    private function rules(array $c): array {
+        $r = array_map(fn ($f) => $f[1], $c['fields']);
+        $r['category'] = 'required|in:' . implode(',', config('warganet.' . $c['cats']));
+        $r['status'] = 'required|in:' . implode(',', array_keys($c['status']));
+        return $r;
+    }
 
     public function index(string $res) {
-        [$model, $rules] = $this->cfg($res);
-        return view('admin.crud', ['res' => $res, 'fields' => array_keys($rules), 'rows' => $model::latest()->limit(100)->get()]);
+        $c = $this->cfg($res);
+        return view('admin.crud', ['res' => $res, 'title' => $c['title'], 'fields' => $c['fields'],
+            'cats' => config('warganet.' . $c['cats']), 'statuses' => $c['status'], 'rows' => $c['model']::latest()->limit(100)->get()]);
     }
 
     public function store(Request $r, string $res) {
-        [$model, $rules] = $this->cfg($res);
-        $d = $r->validate($rules);
+        $c = $this->cfg($res);
+        $d = $r->validate($this->rules($c));
         $d['created_by'] = $r->user()->id;
         if ($res === 'announcements') {
             $d['slug'] = Str::slug($d['title']) . '-' . Str::random(5);
             $d['is_important'] = $r->boolean('is_important');
             $d['published_at'] = $d['status'] === 'published' ? now() : null;
         }
-        $model::create($d);
-        return back()->with('ok', 'Saved.');
+        $c['model']::create($d);
+        return back()->with('ok', 'Berhasil disimpan.');
     }
 
     public function destroy(string $res, int $id) {
-        $this->cfg($res)[0]::findOrFail($id)->delete();
-        return back()->with('ok', 'Deleted.');
+        $this->cfg($res)['model']::findOrFail($id)->delete();
+        return back()->with('ok', 'Berhasil dihapus.');
     }
 }
