@@ -8,8 +8,11 @@
   <div class="col-md-7 col-lg-5">
     <div class="app-card p-4 p-md-5 text-center">
       
-      <!-- Mascot Greeting -->
-      <img src="{{ asset('images/cat-waving.png') }}" alt="Mascot WargaNet" style="height: 80px; width: auto; margin-bottom: 0.75rem;">
+      <!-- Mascot Greeting with Fallback -->
+      <img src="{{ asset('images/cat-waving.png') }}" 
+           onerror="this.onerror=null;this.src='{{ asset('images/cat-peeking.png') }}';" 
+           alt="Mascot WargaNet" 
+           style="height: 80px; width: auto; margin-bottom: 0.75rem;">
 
       <h1 class="h4 fw-bold mb-1 text-dark">Masuk ke WargaNet</h1>
       <p class="small text-muted mb-4">Masuk untuk menyampaikan laporan dan memantau lingkungan.</p>

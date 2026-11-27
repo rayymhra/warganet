@@ -9,7 +9,10 @@
     <div class="app-card p-4 p-md-5">
       
       <div class="text-center mb-4">
-        <img src="{{ asset('images/cat-peeking.png') }}" alt="Mascot WargaNet" style="height: 75px; width: auto; margin-bottom: 0.5rem;">
+        <img src="{{ asset('images/cat-peeking.png') }}" 
+             onerror="this.onerror=null;this.src='{{ asset('images/cat-waving.png') }}';" 
+             alt="Mascot WargaNet" 
+             style="height: 75px; width: auto; margin-bottom: 0.5rem;">
         <h1 class="h4 fw-bold mb-1 text-dark">Daftar Akun Warga</h1>
         <p class="small text-muted mb-0">Bergabung dengan portal lingkungan untuk saling peduli dan terhubung.</p>
       </div>

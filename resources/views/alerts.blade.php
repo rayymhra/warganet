@@ -8,19 +8,20 @@
   $inc = config('warganet.incident');
 @endphp
 
-<!-- EAS Hero Banner (Matching Reference Screen 2: EAS Header) -->
+<!-- EAS Hero Banner with Fallback Image -->
 <div class="hero-banner-card mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #dbeafe 100%);">
   <div class="row align-items-center g-3">
     <div class="col-md-8">
-      <div class="badge-pill badge-pill-blue mb-2">2. EMERGENCY ALERT SYSTEM (EAS)</div>
+      <div class="badge-pill badge-pill-blue mb-2">EMERGENCY ALERT SYSTEM (EAS)</div>
       <h1 class="h3 fw-bold mb-1">Sistem Laporan & Peringatan Darurat</h1>
       <p class="hero-banner-desc mb-3">
-        Laporkan kejadian di sekitar, bantu lingkungan kita lebih aman dan responsif!
+        Laporkan kejadian di sekitar, bantu lingkungan kita lebih aman dan responsif.
       </p>
       @auth
         @if(auth()->user()->role === 'resident')
           <a href="/resident/reports/create" class="btn-pill btn-pill-danger btn-pill-sm">
-            📢 Kirim Laporan Kejadian Sekarang
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            <span>Kirim Laporan Kejadian Sekarang</span>
           </a>
         @endif
       @else
@@ -30,12 +31,15 @@
       @endauth
     </div>
     <div class="col-md-4 text-md-end d-none d-md-block">
-      <img src="{{ asset('images/eas-badge.png') }}" alt="Mascot EAS" style="max-height: 120px; width: auto; filter: drop-shadow(0 4px 10px rgba(37,99,235,0.15));">
+      <img src="{{ asset('images/eas-badge.png') }}" 
+           onerror="this.onerror=null;this.src='{{ asset('images/cat-megaphone.png') }}';" 
+           alt="Mascot EAS" 
+           style="max-height: 120px; width: auto; filter: drop-shadow(0 4px 10px rgba(37,99,235,0.15));">
     </div>
   </div>
 </div>
 
-<!-- 4-Step Process Pipeline from Reference Screen 2 -->
+<!-- 4-Step Process Pipeline -->
 <div class="app-card mb-4 p-4">
   <div class="row g-3 text-center align-items-center justify-content-between">
     <div class="col-6 col-md-3">
@@ -98,8 +102,19 @@
             <h4 class="h6 fw-bold mb-1 text-dark">{{ $r->title }}</h4>
             <p class="small text-muted mb-2">{{ $r->description }}</p>
 
+            @if(!empty($r->image_path))
+              <div class="mb-2">
+                <img src="{{ asset('storage/'.$r->image_path) }}" 
+                     onerror="this.onerror=null;this.src='{{ asset('images/eas-badge.png') }}';" 
+                     alt="{{ $r->title }}" 
+                     class="img-fluid rounded border" 
+                     style="max-height: 180px;">
+              </div>
+            @endif
+
             <div class="small font-monospace text-muted pt-2 border-top" style="border-color: #fecaca !important;">
-              📍 {{ $r->location }} · Terverifikasi oleh Pengurus RT/RW
+              <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              {{ $r->location }} · Terverifikasi oleh Pengurus RT/RW
             </div>
           </div>
         @empty

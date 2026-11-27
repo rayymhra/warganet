@@ -91,6 +91,32 @@
       min-width: 0;
     }
 
+    /* Vector SVG Icons System */
+    .svg-icon {
+      width: 1.15rem;
+      height: 1.15rem;
+      display: inline-block;
+      vertical-align: -0.15em;
+      stroke-width: 2;
+      flex-shrink: 0;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .svg-icon-sm {
+      width: 0.95rem;
+      height: 0.95rem;
+      vertical-align: -0.1em;
+    }
+
+    .svg-icon-lg {
+      width: 1.45rem;
+      height: 1.45rem;
+      vertical-align: -0.15em;
+    }
+
     /* Desktop Window Container Frame */
     .app-window-shell {
       min-height: 100vh;
@@ -200,7 +226,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.15rem;
     }
 
     /* Sidebar Navigation Links (Active Pill State) */
@@ -236,14 +261,15 @@
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
     }
 
-    .sidebar-nav-link.active .nav-icon {
+    .sidebar-nav-link.active .svg-icon {
       color: #ffffff;
     }
 
     .nav-icon {
-      font-size: 1.05rem;
       width: 1.25rem;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* Sidebar Mascot Bottom Box */
@@ -380,7 +406,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
       margin-bottom: 0.6rem;
     }
 
@@ -505,7 +530,7 @@
     .badge-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.35rem;
       font-size: 0.75rem;
       font-weight: 700;
       padding: 0.25rem 0.65rem;
@@ -533,7 +558,7 @@
       color: var(--color-urgent-text);
     }
 
-    /* Filter Pill Tabs from Reference ("Semua", "Makanan & Minuman", etc) */
+    /* Filter Pill Tabs from Reference */
     .filter-pills-row {
       display: flex;
       align-items: center;
@@ -605,14 +630,13 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
-    /* Responsive adjustments */
     #map {
       height: 340px;
       border-radius: var(--radius-md);
       border: 1px solid var(--color-border-card);
     }
 
-    /* Sub-nav for Admin */
+    /* Admin Sub-nav Tab Bar */
     .admin-tab-bar {
       background: #ffffff;
       border: 1px solid var(--color-border-card);
@@ -634,6 +658,9 @@
       color: var(--color-text-muted);
       text-decoration: none;
       white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
     }
 
     .admin-tab-link.active {
@@ -674,7 +701,7 @@
       <!-- Top Titlebar with Decorative Window Dots & User Status -->
       <header class="app-titlebar">
         <div class="d-flex align-items-center gap-2">
-          <!-- Window Dots (Soft Aesthetic Reference) -->
+          <!-- Window Dots -->
           <div class="window-controls-dots d-none d-sm-flex">
             <span class="window-dot window-dot-red"></span>
             <span class="window-dot window-dot-yellow"></span>
@@ -688,7 +715,8 @@
         <!-- Right Quick Controls -->
         <div class="d-flex align-items-center gap-2">
           <a href="tel:112" class="badge-pill badge-pill-red text-decoration-none" title="Panggilan Darurat Bebas Pulsa">
-            🚨 112 Bebas Pulsa
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Darurat 112 Bebas Pulsa</span>
           </a>
 
           @guest
@@ -696,7 +724,7 @@
             <a href="/register" class="btn-pill btn-pill-primary btn-pill-sm">Daftar</a>
           @else
             <span class="small fw-semibold text-muted d-none d-sm-inline">
-              👋 {{ $u->name }} ({{ $u->role === 'admin' ? 'Pengurus' : 'Warga' }})
+              {{ $u->name }} ({{ $u->role === 'admin' ? 'Pengurus' : 'Warga' }})
             </span>
             <form method="post" action="/logout" class="d-inline m-0">
               @csrf
@@ -714,34 +742,46 @@
           <div>
             <!-- Brand -->
             <a href="/" class="sidebar-brand">
-              <span class="sidebar-brand-icon">🏠</span>
+              <span class="sidebar-brand-icon">
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </span>
               <span>WargaNet</span>
             </a>
 
-            <!-- Navigation Links (Matching Reference UI) -->
+            <!-- Navigation Links -->
             <nav class="sidebar-nav-group mt-3">
               <a href="/" class="sidebar-nav-link {{ request()->is('/') ? 'active' : '' }}">
-                <span class="nav-icon">🏠</span>
+                <span class="nav-icon">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </span>
                 <span>Beranda</span>
               </a>
 
               <a href="/schedules" class="sidebar-nav-link {{ request()->is('schedules*') ? 'active' : '' }}">
-                <span class="nav-icon">📅</span>
+                <span class="nav-icon">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                </span>
                 <span>Informasi Lingkungan</span>
               </a>
 
               <a href="/announcements" class="sidebar-nav-link {{ request()->is('announcements*') ? 'active' : '' }}">
-                <span class="nav-icon">📢</span>
+                <span class="nav-icon">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+                </span>
                 <span>Pengumuman RT/RW</span>
               </a>
 
               <a href="/emergency-alerts" class="sidebar-nav-link {{ request()->is('emergency-alerts*') ? 'active' : '' }}">
-                <span class="nav-icon">🛡️</span>
+                <span class="nav-icon">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </span>
                 <span>EAS (Laporan & Siaga)</span>
               </a>
 
               <a href="/businesses" class="sidebar-nav-link {{ request()->is('businesses*') ? 'active' : '' }}">
-                <span class="nav-icon">🏪</span>
+                <span class="nav-icon">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>
+                </span>
                 <span>UMKM Lokal</span>
               </a>
 
@@ -749,18 +789,24 @@
                 @if($u->role === 'resident')
                   <div class="pt-2 mt-2 border-top" style="border-color: var(--color-border-subtle);">
                     <a href="/resident/reports/create" class="sidebar-nav-link {{ request()->is('resident/reports/create') ? 'active' : '' }}">
-                      <span class="nav-icon">📝</span>
+                      <span class="nav-icon">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                      </span>
                       <span>Kirim Laporan</span>
                     </a>
                     <a href="/resident/dashboard" class="sidebar-nav-link {{ request()->is('resident/dashboard') ? 'active' : '' }}">
-                      <span class="nav-icon">📑</span>
+                      <span class="nav-icon">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                      </span>
                       <span>Laporan Saya</span>
                     </a>
                   </div>
                 @else
                   <div class="pt-2 mt-2 border-top" style="border-color: var(--color-border-subtle);">
                     <a href="/admin/dashboard" class="sidebar-nav-link {{ request()->is('admin*') ? 'active' : '' }}">
-                      <span class="nav-icon">⚙️</span>
+                      <span class="nav-icon">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                      </span>
                       <span>Panel Pengurus</span>
                     </a>
                   </div>
@@ -769,11 +815,11 @@
             </nav>
           </div>
 
-          <!-- Bottom Mascot Widget (Warga Saling Peduli) -->
+          <!-- Bottom Mascot Widget -->
           <div class="sidebar-mascot-card d-none d-lg-block">
-            <img src="{{ asset('images/cat-peeking.png') }}" alt="Mascot WargaNet" class="sidebar-mascot-img">
+            <img src="{{ asset('images/cat-peeking.png') }}" onerror="this.onerror=null;this.src='{{ asset('images/cat-waving.png') }}';" alt="Mascot WargaNet" class="sidebar-mascot-img">
             <div class="sidebar-mascot-text">
-              Warga Saling Peduli,<br>Lingkungan Lebih Baik! 💙
+              Warga Saling Peduli,<br>Lingkungan Lebih Baik!
             </div>
           </div>
         </aside>
@@ -782,7 +828,7 @@
         <main class="app-main-content">
           @if(session('ok'))
             <div class="app-alert app-alert-success">
-              <span class="fw-bold">✓</span>
+              <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
               <div>{{ session('ok') }}</div>
             </div>
           @endif
@@ -810,7 +856,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Live Dynamic Clock Script matching Reference Time Display -->
+  <!-- Live Dynamic Clock Script -->
   <script>
     function updateClock() {
       const clockEl = document.getElementById('liveClockTime');
@@ -830,7 +876,7 @@
         const dayNum = now.getDate();
         const monthName = months[now.getMonth()];
         const year = now.getFullYear();
-        dateEl.textContent = `📅 ${dayName}, ${dayNum} ${monthName} ${year}`;
+        dateEl.innerHTML = `<svg class="svg-icon svg-icon-sm me-1" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>${dayName}, ${dayNum} ${monthName} ${year}`;
       }
     }
     updateClock();

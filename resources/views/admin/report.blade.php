@@ -48,7 +48,10 @@
     <div class="col-md-6">
       <div class="p-3 rounded border" style="border-color: var(--color-border-card) !important; background: #ffffff;">
         <div class="fw-bold text-muted small mb-1">LOKASI & WAKTU KEJADIAN</div>
-        <div class="fw-bold text-dark">📍 {{ $r->location }}</div>
+        <div class="fw-bold text-dark">
+          <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          {{ $r->location }}
+        </div>
         <div class="font-monospace text-muted">{{ ($r->occurred_at ?? $r->created_at)->translatedFormat('l, d F Y H:i') }} WIB</div>
       </div>
     </div>
@@ -62,10 +65,15 @@
     </div>
   </div>
 
-  @if($r->image_path)
+  <!-- Inspection Photo with Fallback -->
+  @if(!empty($r->image_path))
     <div class="mb-4">
       <div class="fw-bold small text-muted mb-2">FOTO LAMPIRAN KEJADIAN:</div>
-      <img src="{{ asset('storage/'.$r->image_path) }}" alt="Foto kejadian" class="img-fluid rounded border shadow-sm" style="max-height: 320px; border-color: var(--color-border-card) !important;">
+      <img src="{{ asset('storage/'.$r->image_path) }}" 
+           onerror="this.onerror=null;this.src='{{ asset('images/eas-badge.png') }}';" 
+           alt="{{ $r->title }}" 
+           class="img-fluid rounded border shadow-sm" 
+           style="max-height: 320px; border-color: var(--color-border-card) !important;">
     </div>
   @endif
 
@@ -80,9 +88,9 @@
       <div class="col-md-3">
         <label class="form-label fw-bold small text-dark">Keputusan Status</label>
         <select name="status" class="form-select-pill">
-          <option value="verified" @selected($r->verification_status === 'verified')>✅ Terverifikasi (Tampilkan)</option>
-          <option value="rejected" @selected($r->verification_status === 'rejected')>❌ Tolak Laporan</option>
-          <option value="resolved" @selected($r->verification_status === 'resolved')>☑ Sudah Ditangani</option>
+          <option value="verified" @selected($r->verification_status === 'verified')>Terverifikasi (Tampilkan ke Publik)</option>
+          <option value="rejected" @selected($r->verification_status === 'rejected')>Tolak Laporan</option>
+          <option value="resolved" @selected($r->verification_status === 'resolved')>Sudah Ditangani / Selesai</option>
         </select>
       </div>
 

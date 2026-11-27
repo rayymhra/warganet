@@ -4,7 +4,7 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Header Banner with Megaphone Cat Mascot from Assets -->
+<!-- Header Banner with Fallback Image -->
 <div class="hero-banner-card mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #dbeafe 100%);">
   <div class="row align-items-center g-3">
     <div class="col-md-8">
@@ -15,7 +15,10 @@
       </p>
     </div>
     <div class="col-md-4 text-md-end d-none d-md-block">
-      <img src="{{ asset('images/cat-megaphone.png') }}" alt="Mascot Pengumuman" style="max-height: 95px; width: auto;">
+      <img src="{{ asset('images/cat-megaphone.png') }}" 
+           onerror="this.onerror=null;this.src='{{ asset('images/cat-waving.png') }}';" 
+           alt="Mascot Pengumuman" 
+           style="max-height: 95px; width: auto;">
     </div>
   </div>
 </div>
@@ -27,7 +30,10 @@
       <input type="text" name="q" class="form-control-pill" placeholder="Cari isi atau judul pengumuman..." value="{{ request('q') }}">
     </div>
     <div class="col-md-4 d-flex gap-2">
-      <button type="submit" class="btn-pill btn-pill-primary w-100">Cari</button>
+      <button type="submit" class="btn-pill btn-pill-primary w-100">
+        <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Cari</span>
+      </button>
       @if(auth()->check() && auth()->user()->role === 'admin')
         <a href="/admin/announcements" class="btn-pill btn-pill-outline text-nowrap">+ Buat Pengumuman</a>
       @endif
@@ -35,7 +41,7 @@
   </form>
 </div>
 
-<!-- Announcement List (Matching Reference Layout) -->
+<!-- Announcement List -->
 <div class="app-card">
   <div class="app-card-header">
     <h2 class="app-card-title">Daftar Pengumuman ({{ $items->count() }})</h2>

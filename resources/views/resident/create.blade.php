@@ -14,7 +14,9 @@
 
 <div class="app-card p-4 mb-4">
   <div class="d-flex align-items-center gap-2 mb-3">
-    <div class="stat-icon-circle m-0" style="width: 2.2rem; height: 2.2rem; font-size: 1rem;">📝</div>
+    <div class="stat-icon-circle m-0" style="width: 2.2rem; height: 2.2rem;">
+      <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+    </div>
     <div>
       <h2 class="h6 fw-bold mb-0">Formulir Pelaporan Warga</h2>
       <div class="small text-muted">Laporan akan dianalisis sistem dan diverifikasi pengurus sebelum dipublikasikan.</div>
@@ -25,11 +27,13 @@
     @csrf
 
     <div class="row g-4 mb-4">
-      <!-- Left Column: Photo Upload Box matching Reference Image 2 -->
+      <!-- Left Column: Photo Upload Box with SVG -->
       <div class="col-lg-5">
         <label class="form-label fw-bold small text-dark">Unggah Foto Dokumentasi (Opsional)</label>
         <div class="p-4 rounded text-center d-flex flex-column align-items-center justify-content-center" style="border: 2px dashed #93c5fd; background: #f8fbff; min-height: 220px; cursor: pointer;">
-          <div class="stat-icon-circle mb-2" style="background: #dbeafe; color: var(--color-accent);">📷</div>
+          <div class="stat-icon-circle mb-2" style="background: #dbeafe; color: var(--color-accent);">
+            <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          </div>
           <div class="fw-semibold small text-dark mb-1">Unggah Foto (Opsional)</div>
           <div class="small text-muted mb-3" style="font-size: 0.75rem;">Format gambar JPG, PNG atau foto kamera</div>
           <input type="file" name="image" id="image" class="form-control form-control-sm" accept="image/*" style="max-width: 240px;">
@@ -73,11 +77,17 @@
         <div class="col-md-8">
           <div class="d-flex gap-2">
             <input id="cari" class="form-control-pill" placeholder="Ketik nama patokan/tempat (mis. Masjid Al-Ikhlas)...">
-            <button type="button" class="btn-pill btn-pill-primary" id="btnCari">Cari</button>
+            <button type="button" class="btn-pill btn-pill-primary" id="btnCari">
+              <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <span>Cari</span>
+            </button>
           </div>
         </div>
         <div class="col-md-4">
-          <button type="button" class="btn-pill btn-pill-outline w-100" id="btnGps">📍 Pakai Lokasi Saya</button>
+          <button type="button" class="btn-pill btn-pill-outline w-100" id="btnGps">
+            <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Pakai Lokasi Saya</span>
+          </button>
         </div>
       </div>
 
@@ -95,10 +105,11 @@
       <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
     </div>
 
-    <!-- Submit Action Button matching Reference "Kirim Laporan" -->
+    <!-- Submit Action Button -->
     <div class="text-end">
       <button type="submit" class="btn-pill btn-pill-primary px-4 py-2" style="font-size: 0.95rem;">
-        ✈️ Kirim Laporan
+        <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <span>Kirim Laporan</span>
       </button>
     </div>
   </form>
@@ -167,7 +178,7 @@
         const b = document.createElement('button');
         b.type = 'button';
         b.className = 'list-group-item list-group-item-action small py-2 px-3';
-        b.textContent = '📍 ' + t.display_name;
+        b.textContent = t.display_name;
         b.onclick = () => {
           manual = false;
           taruh(+t.lat, +t.lon, t.display_name, 17);
