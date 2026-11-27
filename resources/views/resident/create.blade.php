@@ -1,121 +1,108 @@
-{{-- Hallmark · macrostructure: Dispatch Triage & Tactical Geocoding Form · theme: Nusantara Civic · genre: editorial --}}
+{{-- Hallmark · macrostructure: Incident Reporting Form · theme: WargaNet Pastel Blue · genre: playful --}}
 {{-- pre-emit critique: P5 H5 E5 S5 R5 V5 --}}
 {{-- slop test: pass --}}
 @extends('layouts.app')
 
 @section('content')
-<div class="civic-section-header mb-3">
-  <span class="civic-eyebrow">FORMULIR PELAPORAN CEPAT</span>
-  <h1 class="h3 mb-1">Laporkan Kejadian di Lingkungan</h1>
-  <p class="text-muted small mb-0">
-    Sampaikan kejadian penting seperti jalan rusak, lampu padam, banjir, pohon tumbang, atau potensi bahaya lainnya di sekitar tempat tinggal Anda.
-  </p>
+<!-- Back navigation & Title -->
+<div class="d-flex align-items-center gap-2 mb-3">
+  <a href="/resident/dashboard" class="btn-pill btn-pill-outline btn-pill-sm">
+    ← Kembali
+  </a>
+  <h1 class="h4 fw-bold mb-0">Kirim Laporan Kejadian</h1>
 </div>
 
-<!-- Safety Notice -->
-<div class="civic-alert civic-alert-caution align-items-center mb-4">
-  <span class="fw-bold font-monospace">⚠️ PERHATIAN:</span>
-  <div>
-    Laporan warga akan diperiksa keabsahannya oleh pengurus RT/RW sebelum dipublikasikan. Jika keadaan darurat mengancam keselamatan jiwa, segera hubungi <strong>112</strong> atau pos kamling setempat.
+<div class="app-card p-4 mb-4">
+  <div class="d-flex align-items-center gap-2 mb-3">
+    <div class="stat-icon-circle m-0" style="width: 2.2rem; height: 2.2rem; font-size: 1rem;">📝</div>
+    <div>
+      <h2 class="h6 fw-bold mb-0">Formulir Pelaporan Warga</h2>
+      <div class="small text-muted">Laporan akan dianalisis sistem dan diverifikasi pengurus sebelum dipublikasikan.</div>
+    </div>
   </div>
-</div>
 
-<form method="post" action="/resident/reports" enctype="multipart/form-data" class="civic-card p-4 p-md-5 mb-5">
-  @csrf
+  <form method="post" action="/resident/reports" enctype="multipart/form-data">
+    @csrf
 
-  <!-- Section 1: Detail Kejadian -->
-  <fieldset class="mb-5">
-    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom" style="border-color: var(--color-border-subtle) !important;">
-      <span class="font-monospace fw-bold" style="color: var(--color-accent); font-size: 1.1rem;">01.</span>
-      <legend class="h6 fw-bold mb-0" style="color: var(--color-text-main);">Deskripsi Kejadian</legend>
-    </div>
-
-    <div class="mb-3">
-      <label class="civic-label" for="title">Judul Singkat Kejadian <span class="text-danger">*</span></label>
-      <input id="title" class="civic-input" name="title" placeholder="Contoh: Tiang listrik miring menghalangi gang RT 03" value="{{ old('title') }}" required>
-    </div>
-
-    <div class="mb-3">
-      <label class="civic-label" for="description">Kronologi / Penjelasan Lengkap <span class="text-danger">*</span></label>
-      <textarea id="description" class="civic-textarea" name="description" rows="4" placeholder="Jelaskan detail kejadian, kondisi terkini, dan perkiraan dampak (minimal 10 huruf)..." required>{{ old('description') }}</textarea>
-    </div>
-
-    <div class="row g-3">
-      <div class="col-md-6">
-        <label class="civic-label" for="category">Jenis / Kategori Kejadian</label>
-        <select id="category" class="civic-select" name="category">
-          <option value="">Biarkan pengurus / bantuan sistem mengelompokkan</option>
-          @foreach(config('warganet.incident') as $k => $v)
-            <option value="{{ $k }}" @selected(old('category') == $k)>{{ $v }}</option>
-          @endforeach
-        </select>
-        <div class="civic-helper">Pilih jenis kendala yang paling sesuai atau biarkan kosong jika ragu.</div>
-      </div>
-      <div class="col-md-6">
-        <label class="civic-label" for="occurred_at">Waktu Kejadian</label>
-        <input id="occurred_at" class="civic-input" type="datetime-local" name="occurred_at" value="{{ old('occurred_at') }}">
-        <div class="civic-helper">Kosongkan jika baru saja terjadi.</div>
-      </div>
-    </div>
-  </fieldset>
-
-  <!-- Section 2: Penentuan Titik Lokasi -->
-  <fieldset class="mb-5">
-    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom" style="border-color: var(--color-border-subtle) !important;">
-      <span class="font-monospace fw-bold" style="color: var(--color-accent); font-size: 1.1rem;">02.</span>
-      <legend class="h6 fw-bold mb-0" style="color: var(--color-text-main);">Lokasi Presisi & Peta</legend>
-    </div>
-
-    <!-- Search & GPS Controls -->
-    <div class="row g-2 mb-2">
-      <div class="col-md-8">
-        <div class="d-flex gap-2">
-          <input id="cari" class="civic-input" placeholder="Cari nama patokan/masjid/jalan (mis. Masjid Al-Ikhlas Takokak)...">
-          <button type="button" class="btn-civic btn-civic-primary" id="btnCari">Cari Lokasi</button>
+    <div class="row g-4 mb-4">
+      <!-- Left Column: Photo Upload Box matching Reference Image 2 -->
+      <div class="col-lg-5">
+        <label class="form-label fw-bold small text-dark">Unggah Foto Dokumentasi (Opsional)</label>
+        <div class="p-4 rounded text-center d-flex flex-column align-items-center justify-content-center" style="border: 2px dashed #93c5fd; background: #f8fbff; min-height: 220px; cursor: pointer;">
+          <div class="stat-icon-circle mb-2" style="background: #dbeafe; color: var(--color-accent);">📷</div>
+          <div class="fw-semibold small text-dark mb-1">Unggah Foto (Opsional)</div>
+          <div class="small text-muted mb-3" style="font-size: 0.75rem;">Format gambar JPG, PNG atau foto kamera</div>
+          <input type="file" name="image" id="image" class="form-control form-control-sm" accept="image/*" style="max-width: 240px;">
         </div>
       </div>
-      <div class="col-md-4">
-        <button type="button" class="btn-civic btn-civic-outline w-100" id="btnGps">📍 Pakai Titik GPS Saya</button>
+
+      <!-- Right Column: Form Details -->
+      <div class="col-lg-7">
+        <div class="mb-3">
+          <label class="form-label fw-bold small text-dark" for="category">Kategori Laporan</label>
+          <select id="category" name="category" class="form-select-pill">
+            <option value="">Pilih Kategori (atau biarkan AI menganalisis)</option>
+            @foreach(config('warganet.incident') as $k => $v)
+              <option value="{{ $k }}" @selected(old('category') == $k)>{{ $v }}</option>
+            @endforeach
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold small text-dark" for="title">Judul Laporan Kejadian <span class="text-danger">*</span></label>
+          <input id="title" name="title" class="form-control-pill" placeholder="Mis. Pohon Tumbang Menutup Jalan" value="{{ old('title') }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold small text-dark" for="description">Deskripsi Kejadian <span class="text-danger">*</span></label>
+          <textarea id="description" name="description" class="form-textarea-pill" rows="4" placeholder="Ceritakan kejadian dengan jelas (minimal 10 huruf)..." required>{{ old('description') }}</textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold small text-dark" for="occurred_at">Waktu Kejadian (Opsional)</label>
+          <input id="occurred_at" type="datetime-local" name="occurred_at" class="form-control-pill" value="{{ old('occurred_at') }}">
+        </div>
       </div>
     </div>
 
-    <div id="hasil" class="list-group mb-2"></div>
+    <!-- Geolocation & Map -->
+    <div class="pt-3 border-top mb-4" style="border-color: var(--color-border-card);">
+      <label class="form-label fw-bold small text-dark">Titik Lokasi Kejadian</label>
 
-    <div id="map" class="mb-2"></div>
-    <div class="small text-muted mb-3">
-      Sentuh peta atau geser penanda merah untuk menentukan koordinat lokasi kejadian secara tepat.
+      <div class="row g-2 mb-2">
+        <div class="col-md-8">
+          <div class="d-flex gap-2">
+            <input id="cari" class="form-control-pill" placeholder="Ketik nama patokan/tempat (mis. Masjid Al-Ikhlas)...">
+            <button type="button" class="btn-pill btn-pill-primary" id="btnCari">Cari</button>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <button type="button" class="btn-pill btn-pill-outline w-100" id="btnGps">📍 Pakai Lokasi Saya</button>
+        </div>
+      </div>
+
+      <div id="hasil" class="list-group mb-2"></div>
+
+      <div id="map" class="mb-2"></div>
+      <small class="text-muted d-block mb-3">Sentuh peta atau geser penanda untuk menentukan titik yang akurat.</small>
+
+      <div class="mb-3">
+        <label class="form-label fw-bold small text-dark" for="lokasi">Keterangan Alamat / RT / RW <span class="text-danger">*</span></label>
+        <input class="form-control-pill" id="lokasi" name="location" placeholder="Contoh: RT 03 RW 02, depan pos kamling" value="{{ old('location') }}" required>
+      </div>
+
+      <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
+      <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
     </div>
 
-    <div class="mb-3">
-      <label class="civic-label" for="lokasi">Keterangan Alamat / Patokan Khusus <span class="text-danger">*</span></label>
-      <input class="civic-input" id="lokasi" name="location" placeholder="Mis. Depan Posyandu Mawar RT 02 RW 04, samping warung Bu Siti" value="{{ old('location') }}" required>
+    <!-- Submit Action Button matching Reference "Kirim Laporan" -->
+    <div class="text-end">
+      <button type="submit" class="btn-pill btn-pill-primary px-4 py-2" style="font-size: 0.95rem;">
+        ✈️ Kirim Laporan
+      </button>
     </div>
-
-    <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
-    <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
-  </fieldset>
-
-  <!-- Section 3: Lampiran Foto -->
-  <fieldset class="mb-4">
-    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom" style="border-color: var(--color-border-subtle) !important;">
-      <span class="font-monospace fw-bold" style="color: var(--color-accent); font-size: 1.1rem;">03.</span>
-      <legend class="h6 fw-bold mb-0" style="color: var(--color-text-main);">Dokumentasi Foto Lapangan</legend>
-    </div>
-
-    <div class="mb-2">
-      <label class="civic-label" for="image">Unggah Foto Kejadian <span class="text-muted font-normal">(opsional)</span></label>
-      <input id="image" class="civic-input" type="file" name="image" accept="image/*">
-      <div class="civic-helper">Foto membantu pengurus memverifikasi tingkat keparahan kejadian dengan cepat.</div>
-    </div>
-  </fieldset>
-
-  <div class="pt-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2" style="border-color: var(--color-border-subtle) !important;">
-    <a href="/resident/dashboard" class="btn-civic btn-civic-subtle">← Batal</a>
-    <button type="submit" class="btn-civic btn-civic-urgent py-2 px-4">
-      Kirim Laporan ke Pengurus
-    </button>
-  </div>
-</form>
+  </form>
+</div>
 @endsection
 
 @push('js')
@@ -167,19 +154,19 @@
   async function cari() {
     const q = document.getElementById('cari').value.trim();
     if (!q) return;
-    hasil.innerHTML = '<div class="civic-card p-2 text-muted small">Mencari titik lokasi...</div>';
+    hasil.innerHTML = '<div class="list-group-item small">Mencari lokasi...</div>';
     try {
       const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=id&accept-language=id&q=' + encodeURIComponent(q));
       const d = await r.json();
       hasil.innerHTML = '';
       if (!d.length) {
-        hasil.innerHTML = '<div class="civic-card p-2 text-muted small">Tempat tidak ditemukan. Coba nama lain atau sentuh peta langsung.</div>';
+        hasil.innerHTML = '<div class="list-group-item small">Tempat tidak ditemukan. Sentuh peta langsung untuk memilih titik.</div>';
         return;
       }
       d.forEach(t => {
         const b = document.createElement('button');
         b.type = 'button';
-        b.className = 'list-group-item list-group-item-action small py-2 px-3 border-bottom';
+        b.className = 'list-group-item list-group-item-action small py-2 px-3';
         b.textContent = '📍 ' + t.display_name;
         b.onclick = () => {
           manual = false;
@@ -189,7 +176,7 @@
         hasil.appendChild(b);
       });
     } catch(e) {
-      hasil.innerHTML = '<div class="civic-card p-2 text-danger small">Pencarian gagal. Silakan sentuh peta langsung untuk memilih lokasi.</div>';
+      hasil.innerHTML = '<div class="list-group-item small text-danger">Pencarian gagal. Sentuh peta untuk memilih titik.</div>';
     }
   }
 
@@ -211,7 +198,7 @@
         manual = false;
         taruh(p.coords.latitude, p.coords.longitude, null, 17);
       },
-      () => alert('Lokasi tidak bisa diambil. Pastikan izin lokasi aktif pada peramban Anda.'),
+      () => alert('Lokasi tidak dapat diambil. Pastikan izin lokasi aktif pada browser.'),
       { enableHighAccuracy: true, timeout: 15000 }
     );
   };

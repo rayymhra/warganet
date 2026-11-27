@@ -1,4 +1,4 @@
-{{-- Hallmark · macrostructure: Civic Bulletin & Operational Gazette · theme: Nusantara Civic · genre: editorial --}}
+{{-- Hallmark · macrostructure: Playful Civic Dashboard · theme: WargaNet Pastel Blue · genre: playful --}}
 {{-- pre-emit critique: P5 H5 E5 S5 R5 V5 --}}
 {{-- slop test: pass --}}
 @extends('layouts.app')
@@ -9,211 +9,212 @@
   $inc = config('warganet.incident');
 @endphp
 
-<!-- Lead Civic Dispatch Header -->
-<section class="civic-card p-4 p-md-5 mb-4 border-0" style="background: var(--color-surface); border-left: 4px solid var(--color-accent) !important;">
-  <div class="row g-4 align-items-center">
-    <div class="col-lg-8">
-      <div class="civic-eyebrow">PORTAL KOORDINASI WARGA</div>
-      <h1 class="display-6 fw-bold mb-3" style="color: var(--color-text-main); line-height: 1.15;">
-        Pusat Komunikasi & Ketertiban Lingkungan Warga.
+<!-- Top Hero Banner (Matching Reference Screen 1) -->
+<div class="hero-banner-card mb-4">
+  <div class="row align-items-center g-3">
+    <!-- Greeting & Subtitle -->
+    <div class="col-md-7 col-lg-7">
+      <h1 class="hero-banner-title">
+        Halo, {{ $u ? $u->name : 'Brev' }}! 👋
       </h1>
-      <p class="mb-4 text-muted" style="max-width: 620px; font-size: 1.025rem;">
-        Kanal resmi pemantauan agenda lingkungan, rilis maklumat pengurus, dan pelaporan kejadian cepat terverifikasi untuk ketenteraman warga bersama.
+      <p class="hero-banner-desc">
+        Semoga hari kamu menyenangkan di lingkungan kita!
       </p>
-      <div class="d-flex align-items-center gap-2 flex-wrap">
-        <a href="/schedules" class="btn-civic btn-civic-primary">
-          <span>Lihat Agenda Kegiatan</span>
-          <span>→</span>
-        </a>
+      <div class="mt-3 d-flex align-items-center gap-2 flex-wrap">
         @guest
-          <a href="/register" class="btn-civic btn-civic-outline">Daftar Akun Warga</a>
+          <a href="/register" class="btn-pill btn-pill-primary btn-pill-sm">Gabung Jadi Warga</a>
+          <a href="/schedules" class="btn-pill btn-pill-outline btn-pill-sm">Lihat Jadwal</a>
         @elseif($u->role === 'resident')
-          <a href="/resident/reports/create" class="btn-civic btn-civic-urgent">📢 Laporkan Kejadian</a>
+          <a href="/resident/reports/create" class="btn-pill btn-pill-danger btn-pill-sm">📢 Lapor Kejadian</a>
+          <a href="/schedules" class="btn-pill btn-pill-outline btn-pill-sm">Agenda Lingkungan</a>
         @else
-          <a href="/admin/dashboard" class="btn-civic btn-civic-outline">Buka Panel Admin</a>
+          <a href="/admin/dashboard" class="btn-pill btn-pill-primary btn-pill-sm">Buka Panel Pengurus</a>
         @endguest
       </div>
     </div>
-    <div class="col-lg-4">
-      <div class="p-3" style="background: var(--color-surface-subtle); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm);">
-        <div class="civic-eyebrow mb-1">STATUS LINGKUNGAN</div>
-        @if($alerts->count())
-          <div class="d-flex align-items-center gap-2 text-danger fw-semibold mb-2">
-            <span class="civic-badge civic-badge-urgent">WASPADA</span>
-            <span>{{ $alerts->count() }} Peringatan Terverifikasi</span>
-          </div>
-          <p class="small text-muted mb-2">Periksa informasi keadaan darurat dan imbauan keselamatan pengurus.</p>
-          <a href="/emergency-alerts" class="btn-civic btn-civic-urgent btn-civic-sm w-100">Buka Info Darurat</a>
-        @else
-          <div class="d-flex align-items-center gap-2 text-success fw-semibold mb-1">
-            <span class="civic-badge civic-badge-verified">KONDUSIF</span>
-            <span style="color: var(--color-verified-text);">Situasi Terpantau Aman</span>
-          </div>
-          <p class="small text-muted mb-0">Tidak ada laporan darurat yang aktif. Laporkan segera jika menemukan potensi kendala di sekitar Anda.</p>
-        @endif
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- Active Emergency Flash (Shown only when real alerts exist) -->
-@if($alerts->count())
-  <div class="civic-alert civic-alert-urgent align-items-center justify-content-between flex-wrap gap-2 mb-4">
-    <div class="d-flex align-items-center gap-2">
-      <span class="civic-badge civic-badge-urgent">PERINGATAN</span>
-      <span class="fw-semibold">Terdapat {{ $alerts->count() }} kejadian yang telah diverifikasi oleh pengurus.</span>
-    </div>
-    <a href="/emergency-alerts" class="btn-civic btn-civic-urgent btn-civic-sm">Lihat Detail Laporan & Titik Lokasi →</a>
-  </div>
-@endif
+    <!-- Center Mascot & Live Clock Card from Reference -->
+    <div class="col-md-5 col-lg-5 d-flex align-items-center justify-content-md-end gap-3 flex-wrap">
+      <img src="{{ asset('images/cat-waving.png') }}" alt="Mascot WargaNet" class="hero-mascot-img d-none d-sm-block">
 
-<!-- Asymmetric Dual Gazette: Agenda & Maklumat -->
-<div class="row g-4 mb-5">
-  <!-- Left Column: Announcements (Warta Warga) -->
-  <div class="col-lg-7">
-    <div class="civic-section-header">
-      <span class="civic-eyebrow">WARTA & MAKLUMAT</span>
-      <h2 class="h4 mb-0">Pengumuman Terbaru</h2>
-    </div>
-
-    <div class="d-flex flex-column gap-3">
-      @forelse($announcements as $a)
-        <article class="civic-card p-3 p-md-4 position-relative">
-          <div class="d-flex align-items-center justify-content-between gap-2 mb-2 flex-wrap">
-            <div class="d-flex align-items-center gap-2">
-              <span class="civic-badge civic-badge-accent">{{ $a->category }}</span>
-              @if($a->is_important)
-                <span class="civic-badge civic-badge-urgent">PENTING</span>
-              @endif
-            </div>
-            <time class="small font-monospace text-muted">{{ $a->published_at?->translatedFormat('d M Y') ?? 'Baru saja' }}</time>
-          </div>
-          <h3 class="h5 mb-2 fw-bold" style="color: var(--color-text-main);">{{ $a->title }}</h3>
-          <p class="text-muted mb-0" style="font-size: 0.925rem; line-height: 1.55;">
-            {{ \Illuminate\Support\Str::limit($a->content, 140) }}
-          </p>
-        </article>
-      @empty
-        <div class="civic-card p-4 text-center text-muted">
-          Belum ada pengumuman yang diterbitkan saat ini.
-        </div>
-      @endforelse
-
-      <div>
-        <a href="/announcements" class="btn-civic btn-civic-subtle btn-civic-sm">
-          Semua Pengumuman Lingkungan →
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Right Column: Agenda & Schedules -->
-  <div class="col-lg-5">
-    <div class="civic-section-header">
-      <span class="civic-eyebrow">AGENDA WILAYAH</span>
-      <h2 class="h4 mb-0">Jadwal Terdekat</h2>
-    </div>
-
-    <div class="d-flex flex-column gap-3">
-      @forelse($schedules as $s)
-        <div class="civic-card p-3">
-          <div class="d-flex gap-3 align-items-start">
-            <div class="text-center p-2 rounded" style="background: var(--color-surface-subtle); border: 1px solid var(--color-border-subtle); min-width: 3.5rem;">
-              <div class="small fw-bold text-uppercase font-monospace" style="color: var(--color-accent);">{{ $s->date->translatedFormat('M') }}</div>
-              <div class="h4 mb-0 fw-bold">{{ $s->date->translatedFormat('d') }}</div>
-            </div>
-            <div class="flex-grow-1 min-w-0">
-              <div class="d-flex align-items-center gap-2 mb-1">
-                <span class="civic-badge civic-badge-neutral">{{ $s->category }}</span>
-                @if($s->status === 'cancelled')
-                  <span class="civic-badge civic-badge-caution">Dibatalkan</span>
-                @endif
-              </div>
-              <h4 class="h6 fw-bold mb-1" style="color: var(--color-text-main);">{{ $s->title }}</h4>
-              <div class="small text-muted font-monospace">
-                🕒 {{ substr($s->start_time, 0, 5) }} WIB · 📍 {{ $s->location }}
-              </div>
-            </div>
-          </div>
-        </div>
-      @empty
-        <div class="civic-card p-4 text-center text-muted">
-          Belum ada jadwal kegiatan terdaftar.
-        </div>
-      @endforelse
-
-      <div>
-        <a href="/schedules" class="btn-civic btn-civic-subtle btn-civic-sm">
-          Kalender Agenda Lengkap →
-        </a>
+      <!-- Live Clock Card matching Reference -->
+      <div class="live-clock-card">
+        <div id="liveClockDate" class="clock-date">📅 Memuat...</div>
+        <div id="liveClockTime" class="clock-time">--:--</div>
+        <div class="clock-wib">WIB</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Local Business Registry (Pasar Warga) -->
-<section class="mb-5">
-  <div class="civic-section-header">
-    <span class="civic-eyebrow">EKONOMI LOKAL</span>
-    <div class="d-flex justify-content-between align-items-baseline flex-wrap gap-2">
-      <h2 class="h4 mb-0">Direktori Usaha Warga</h2>
-      <a href="/businesses" class="small text-decoration-none fw-semibold" style="color: var(--color-accent);">Lihat semua unit usaha →</a>
+<!-- Active Emergency Alert Card (Peringatan Darurat from Reference) -->
+@if($alerts->count())
+  @php $firstAlert = $alerts->first(); @endphp
+  <div class="app-card mb-4 p-3" style="background: linear-gradient(135deg, #fff5f5, #fed7d7); border-color: #fca5a5;">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-3">
+        <div class="stat-icon-circle m-0" style="background: #fee2e2; color: #dc2626;">🚨</div>
+        <div>
+          <div class="fw-bold text-danger" style="font-size: 1rem;">
+            Peringatan Darurat: {{ $firstAlert->title }}
+          </div>
+          <div class="small text-muted font-monospace">
+            📍 {{ $firstAlert->location }} · {{ $firstAlert->created_at->translatedFormat('d M Y · H:i') }} WIB
+          </div>
+        </div>
+      </div>
+      <a href="/emergency-alerts" class="btn-pill btn-pill-danger btn-pill-sm">
+        Lihat Detail Kejadian →
+      </a>
+    </div>
+  </div>
+@endif
+
+<!-- Section: "Ringkasan Hari Ini" (4 Stat Cards from Reference) -->
+<div class="mb-4">
+  <h2 class="h5 fw-bold mb-3" style="font-family: var(--font-display); color: var(--color-text-main);">
+    Ringkasan Hari Ini
+  </h2>
+
+  <div class="row g-3">
+    <!-- Card 1: Pengumuman Baru -->
+    <div class="col-6 col-md-3">
+      <div class="stat-pill-card">
+        <div class="stat-icon-circle">📢</div>
+        <div class="stat-value">{{ $announcements->count() }}</div>
+        <div class="stat-label">Pengumuman Baru</div>
+      </div>
+    </div>
+
+    <!-- Card 2: Kegiatan RT/RW -->
+    <div class="col-6 col-md-3">
+      <div class="stat-pill-card">
+        <div class="stat-icon-circle">📅</div>
+        <div class="stat-value">{{ $schedules->count() }}</div>
+        <div class="stat-label">Kegiatan RT/RW</div>
+      </div>
+    </div>
+
+    <!-- Card 3: Laporan Siaga -->
+    <div class="col-6 col-md-3">
+      <div class="stat-pill-card">
+        <div class="stat-icon-circle" style="{{ $alerts->count() > 0 ? 'background: #fee2e2; color: #ef4444;' : '' }}">🛡️</div>
+        <div class="stat-value" style="{{ $alerts->count() > 0 ? 'color: #ef4444;' : '' }}">{{ $alerts->count() }}</div>
+        <div class="stat-label">Laporan Siaga</div>
+      </div>
+    </div>
+
+    <!-- Card 4: UMKM Terdaftar -->
+    <div class="col-6 col-md-3">
+      <div class="stat-pill-card">
+        <div class="stat-icon-circle">🏪</div>
+        <div class="stat-value">{{ $businesses->count() }}</div>
+        <div class="stat-label">UMKM Terdaftar</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content Grid: Pengumuman Terbaru & Kegiatan Mendatang -->
+<div class="row g-4">
+  
+  <!-- Left Column: Pengumuman Terbaru -->
+  <div class="col-lg-7">
+    <div class="app-card">
+      <div class="app-card-header">
+        <h3 class="app-card-title">Pengumuman Terbaru</h3>
+        <a href="/announcements" class="app-card-action">
+          Lihat Semua <span>→</span>
+        </a>
+      </div>
+
+      <div class="d-flex flex-column gap-2">
+        @forelse($announcements->take(4) as $a)
+          <div class="p-3 rounded d-flex align-items-center justify-content-between gap-3" style="background: var(--color-surface-subtle); border: 1px solid var(--color-border-subtle);">
+            <div class="d-flex align-items-center gap-3 min-w-0">
+              <div class="stat-icon-circle m-0 flex-shrink-0" style="width: 2.3rem; height: 2.3rem; font-size: 1rem;">
+                📢
+              </div>
+              <div class="min-w-0">
+                <div class="fw-bold text-dark text-truncate" style="font-size: 0.925rem;">
+                  {{ $a->title }}
+                </div>
+                <div class="small text-muted font-monospace">
+                  {{ $a->category }} · {{ $a->published_at?->translatedFormat('d M Y') ?? 'Baru saja' }}
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-shrink-0">
+              @if($a->is_important)
+                <span class="badge-pill badge-pill-red">Penting</span>
+              @else
+                <span class="badge-pill badge-pill-blue">Baru</span>
+              @endif
+            </div>
+          </div>
+        @empty
+          <div class="text-center py-4 text-muted small">
+            Belum ada pengumuman terbaru saat ini.
+          </div>
+        @endforelse
+      </div>
     </div>
   </div>
 
-  <div class="row g-3">
-    @forelse($businesses->take(6) as $b)
-      <div class="col-md-6 col-lg-4">
-        <div class="civic-card p-3 h-100 d-flex flex-column justify-content-between">
-          <div>
-            <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-              <h3 class="h6 fw-bold mb-0" style="color: var(--color-text-main);">{{ $b->name }}</h3>
-              <span class="civic-badge civic-badge-neutral">{{ $b->category }}</span>
-            </div>
-            @if($b->description)
-              <p class="small text-muted mb-3">{{ \Illuminate\Support\Str::limit($b->description, 80) }}</p>
-            @endif
-          </div>
-          <div class="pt-2 border-top" style="border-color: var(--color-border-subtle) !important;">
-            <div class="small text-muted">
-              @if($b->address)<div>📍 {{ $b->address }}</div>@endif
-              @if($b->phone)<div>📞 <span class="font-monospace">{{ $b->phone }}</span></div>@endif
-            </div>
-          </div>
-        </div>
+  <!-- Right Column: Kegiatan Mendatang (Illustrated Card with Mascot Banner) -->
+  <div class="col-lg-5">
+    <div class="app-card">
+      <div class="app-card-header">
+        <h3 class="app-card-title">Kegiatan Mendatang</h3>
+        <a href="/schedules" class="app-card-action">
+          Lihat Semua <span>→</span>
+        </a>
       </div>
-    @empty
-      <div class="col-12">
-        <div class="civic-card p-4 text-center text-muted">
-          Belum ada profil usaha warga yang didaftarkan.
-        </div>
-      </div>
-    @endforelse
-  </div>
-</section>
 
-<!-- Civic Participation Protocol -->
-<section class="civic-card p-4 p-md-5">
-  <div class="civic-section-header">
-    <span class="civic-eyebrow">PANDUAN SISTEM</span>
-    <h2 class="h4 mb-0">Alur Partisipasi & Pelaporan Warga</h2>
+      <!-- Featured Upcoming Event Card matching Reference -->
+      @if($schedules->isNotEmpty())
+        @php $featured = $schedules->first(); @endphp
+        <div class="rounded overflow-hidden mb-3" style="border: 1px solid var(--color-border-card); background: #ffffff;">
+          <img src="{{ asset('images/banner-activities.jpg') }}" alt="Kegiatan Lingkungan" class="w-100 object-fit-cover" style="height: 120px;">
+          <div class="p-3">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <h4 class="h6 fw-bold mb-0 text-dark">{{ $featured->title }}</h4>
+              <span class="badge-pill badge-pill-green">Terjadwal</span>
+            </div>
+            <div class="small text-muted mb-2 font-monospace">
+              🗓 {{ $featured->date->translatedFormat('D, d M Y') }} · {{ substr($featured->start_time, 0, 5) }} WIB<br>
+              📍 {{ $featured->location }}
+            </div>
+            <a href="/schedules" class="btn-pill btn-pill-outline btn-pill-sm w-100">
+              Lihat Detail Kegiatan
+            </a>
+          </div>
+        </div>
+      @else
+        <div class="text-center py-4 text-muted small">
+          Belum ada jadwal kegiatan mendatang.
+        </div>
+      @endif
+
+      <!-- Secondary Schedules List -->
+      @if($schedules->count() > 1)
+        <div class="d-flex flex-column gap-2 mt-2">
+          @foreach($schedules->slice(1, 2) as $sec)
+            <div class="p-2 px-3 rounded d-flex justify-content-between align-items-center" style="background: var(--color-surface-subtle); border: 1px solid var(--color-border-subtle);">
+              <div class="min-w-0">
+                <div class="fw-semibold text-truncate small">{{ $sec->title }}</div>
+                <div class="small text-muted font-monospace" style="font-size: 0.75rem;">
+                  {{ $sec->date->translatedFormat('d M') }} · 📍 {{ $sec->location }}
+                </div>
+              </div>
+              <span class="badge-pill badge-pill-blue" style="font-size: 0.7rem;">{{ $sec->category }}</span>
+            </div>
+          @endforeach
+        </div>
+      @endif
+    </div>
   </div>
 
-  <div class="row g-4">
-    @foreach([
-      ['1', 'Akses Terbuka', 'Jadwal kerja bakti, posyandu, dan maklumat lingkungan dapat dibaca langsung oleh siapapun tanpa keharusan memiliki akun.'],
-      ['2', 'Pendaftaran Warga', 'Cukup daftarkan nama dan kontak Anda untuk mengaktifkan akses penyampaian laporan kejadian atau usulan lingkungan.'],
-      ['3', 'Pelaporan Presisi', 'Unggah kronologi singkat kejadian serta penanda titik lokasi langsung pada peta interaktif yang tersedia.'],
-      ['4', 'Verifikasi Pengurus', 'Setiap laporan ditinjau oleh pengurus RT/RW sebelum diterbitkan menjadi Maklumat Darurat publik demi validitas kabar.']
-    ] as [$num, $title, $desc])
-      <div class="col-md-6 col-lg-3">
-        <div class="d-flex flex-column h-100">
-          <div class="font-monospace fw-bold mb-2" style="font-size: 1.15rem; color: var(--color-accent);">{{ $num }}.</div>
-          <h3 class="h6 fw-bold mb-2">{{ $title }}</h3>
-          <p class="small text-muted mb-0" style="line-height: 1.55;">{{ $desc }}</p>
-        </div>
-      </div>
-    @endforeach
-  </div>
-</section>
+</div>
 @endsection

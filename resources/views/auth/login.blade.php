@@ -1,4 +1,4 @@
-{{-- Hallmark · macrostructure: Focused Civic Access Card · theme: Nusantara Civic · genre: editorial --}}
+{{-- Hallmark · macrostructure: Focused Civic Access Card · theme: WargaNet Pastel Blue · genre: playful --}}
 {{-- pre-emit critique: P5 H5 E5 S5 R5 V5 --}}
 {{-- slop test: pass --}}
 @extends('layouts.app')
@@ -6,32 +6,33 @@
 @section('content')
 <div class="row justify-content-center py-4">
   <div class="col-md-7 col-lg-5">
-    <div class="civic-card p-4 p-md-5">
-      <div class="civic-section-header text-center mb-4">
-        <span class="civic-eyebrow">AKSES WARGA & PENGURUS</span>
-        <h1 class="h4 mb-1">Masuk ke WargaNet</h1>
-        <p class="text-muted small mb-0">Masuk untuk menyampaikan laporan kejadian atau mengelola data lingkungan.</p>
-      </div>
+    <div class="app-card p-4 p-md-5 text-center">
+      
+      <!-- Mascot Greeting -->
+      <img src="{{ asset('images/cat-waving.png') }}" alt="Mascot WargaNet" style="height: 80px; width: auto; margin-bottom: 0.75rem;">
 
-      <form method="post" action="/login">
+      <h1 class="h4 fw-bold mb-1 text-dark">Masuk ke WargaNet</h1>
+      <p class="small text-muted mb-4">Masuk untuk menyampaikan laporan dan memantau lingkungan.</p>
+
+      <form method="post" action="/login" class="text-start">
         @csrf
         <div class="mb-3">
-          <label class="civic-label" for="email">Alamat Email</label>
-          <input id="email" class="civic-input" name="email" type="email" value="{{ old('email') }}" required autofocus placeholder="nama@domain.id">
+          <label class="form-label fw-bold small text-dark" for="email">Alamat Email</label>
+          <input id="email" class="form-control-pill" name="email" type="email" value="{{ old('email') }}" required autofocus placeholder="nama@email.com">
         </div>
 
         <div class="mb-4">
-          <label class="civic-label" for="password">Kata Sandi</label>
-          <input id="password" class="civic-input" name="password" type="password" required placeholder="••••••••">
+          <label class="form-label fw-bold small text-dark" for="password">Kata Sandi</label>
+          <input id="password" class="form-control-pill" name="password" type="password" required placeholder="••••••••">
         </div>
 
-        <button type="submit" class="btn-civic btn-civic-primary w-100 py-2">
+        <button type="submit" class="btn-pill btn-pill-primary w-100 py-2">
           Masuk ke Akun
         </button>
       </form>
 
-      <div class="pt-4 mt-4 border-top text-center small text-muted" style="border-color: var(--color-border-subtle) !important;">
-        Belum terdaftar sebagai warga? <a href="/register" class="fw-semibold text-decoration-none" style="color: var(--color-accent);">Daftar di sini</a>
+      <div class="pt-3 mt-4 border-top text-center small text-muted" style="border-color: var(--color-border-card) !important;">
+        Belum punya akun warga? <a href="/register" class="fw-bold text-decoration-none" style="color: var(--color-accent);">Daftar di sini</a>
       </div>
     </div>
   </div>

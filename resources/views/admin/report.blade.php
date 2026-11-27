@@ -1,4 +1,4 @@
-{{-- Hallmark · macrostructure: Incident Adjudication Dossier · theme: Nusantara Civic · genre: editorial --}}
+{{-- Hallmark · macrostructure: Incident Adjudication Dossier · theme: WargaNet Pastel Blue · genre: playful --}}
 {{-- pre-emit critique: P5 H5 E5 S5 R5 V5 --}}
 {{-- slop test: pass --}}
 @extends('layouts.app')
@@ -8,92 +8,88 @@
   $st = config('warganet.report_status');
   $inc = config('warganet.incident');
   $col = [
-    'pending' => 'civic-badge-caution',
-    'verified' => 'civic-badge-verified',
-    'rejected' => 'civic-badge-urgent',
-    'resolved' => 'civic-badge-neutral'
+    'pending' => 'badge-pill-yellow',
+    'verified' => 'badge-pill-green',
+    'rejected' => 'badge-pill-red',
+    'resolved' => 'badge-pill-blue'
   ];
 @endphp
 
 <div class="mb-3">
-  <a href="/admin/reports" class="btn-civic btn-civic-subtle btn-civic-sm">
+  <a href="/admin/reports" class="btn-pill btn-pill-outline btn-pill-sm">
     ← Kembali ke Daftar Laporan
   </a>
 </div>
 
-<div class="civic-card p-4 p-md-5 mb-4">
-  <div class="d-flex justify-content-between align-items-start gap-2 mb-3 flex-wrap">
+<div class="app-card mb-4 p-4">
+  <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
     <div>
-      <span class="civic-eyebrow">BERKAS LAPORAN #{{ $r->id }}</span>
-      <h1 class="h3 fw-bold mb-1" style="color: var(--color-text-main);">{{ $r->title }}</h1>
+      <span class="badge-pill badge-pill-blue mb-1">BERKAS #{{ $r->id }}</span>
+      <h1 class="h4 fw-bold mb-0 text-dark">{{ $r->title }}</h1>
     </div>
-    <span class="civic-badge {{ $col[$r->verification_status] ?? 'civic-badge-neutral' }} fs-6">
-      Status: {{ $st[$r->verification_status] ?? $r->verification_status }}
+    <span class="badge-pill {{ $col[$r->verification_status] ?? 'badge-pill-blue' }}" style="font-size: 0.85rem; padding: 0.35rem 0.85rem;">
+      {{ $st[$r->verification_status] ?? $r->verification_status }}
     </span>
   </div>
 
-  <div class="p-3 mb-4 rounded" style="background: var(--color-surface-subtle); border: 1px solid var(--color-border-subtle);">
-    <div class="fw-semibold text-muted small mb-1">KETERANGAN LAPORAN WARGA:</div>
-    <p class="mb-0" style="font-size: 1rem; line-height: 1.6;">{{ $r->description }}</p>
+  <div class="p-3 rounded mb-3" style="background: var(--color-surface-subtle); border: 1px solid var(--color-border-card);">
+    <div class="fw-bold small text-muted mb-1">DESKRIPSI DARI PELAPOR:</div>
+    <p class="mb-0" style="line-height: 1.6;">{{ $r->description }}</p>
   </div>
 
-  <div class="row g-3 mb-4 small">
+  <div class="row g-3 mb-3 small">
     <div class="col-md-6">
-      <div class="p-3 rounded border" style="border-color: var(--color-border-subtle) !important;">
-        <div class="civic-eyebrow mb-1">IDENTITAS PELAPOR</div>
-        <div class="fw-semibold text-dark">{{ $r->user->name }}</div>
-        <div class="font-monospace text-muted">{{ $r->user->email }}</div>
+      <div class="p-3 rounded border" style="border-color: var(--color-border-card) !important; background: #ffffff;">
+        <div class="fw-bold text-muted small mb-1">DATA PELAPOR</div>
+        <div class="fw-bold text-dark">{{ $r->user->name }} ({{ $r->user->email }})</div>
         @if($r->user->phone)<div class="font-monospace text-muted">Telp: {{ $r->user->phone }}</div>@endif
       </div>
     </div>
     <div class="col-md-6">
-      <div class="p-3 rounded border" style="border-color: var(--color-border-subtle) !important;">
-        <div class="civic-eyebrow mb-1">DATA LOKASI & WAKTU</div>
-        <div class="fw-semibold text-dark">📍 {{ $r->location }}</div>
-        <div class="font-monospace text-muted">Koordinat: {{ $r->latitude ?? '-' }}, {{ $r->longitude ?? '-' }}</div>
-        <div class="font-monospace text-muted">Kejadian: {{ ($r->occurred_at ?? $r->created_at)->translatedFormat('l, d F Y H:i') }} WIB</div>
+      <div class="p-3 rounded border" style="border-color: var(--color-border-card) !important; background: #ffffff;">
+        <div class="fw-bold text-muted small mb-1">LOKASI & WAKTU KEJADIAN</div>
+        <div class="fw-bold text-dark">📍 {{ $r->location }}</div>
+        <div class="font-monospace text-muted">{{ ($r->occurred_at ?? $r->created_at)->translatedFormat('l, d F Y H:i') }} WIB</div>
       </div>
     </div>
   </div>
 
-  <div class="p-3 rounded mb-4" style="background: var(--color-surface-subtle); border: 1px solid var(--color-border-subtle);">
-    <div class="civic-eyebrow mb-1">ANALISIS SISTEM / BANTUAN AI</div>
+  <div class="p-3 rounded mb-3" style="background: #eff6ff; border: 1px solid #bfdbfe;">
     <div class="small text-muted">
-      Kategori Terdeteksi: <strong>{{ $inc[$r->category] ?? 'Belum ada' }}</strong>
-      @if($r->ai_severity) · Tingkat Keparahan: <strong>{{ $r->ai_severity }}</strong> @endif
-      — <em>Catatan: Rekomendasi sistem hanya sebagai panduan awal, bukan dasar penetapan fakta.</em>
+      Kategori: <strong>{{ $inc[$r->category] ?? 'Belum ada' }}</strong>
+      @if($r->ai_severity) · Tingkat Keparahan AI: <strong>{{ $r->ai_severity }}</strong> @endif
+      <br><em>Catatan: Rekomendasi kategori dari AI merupakan panduan awal, bukan vonis mutlak.</em>
     </div>
   </div>
 
   @if($r->image_path)
     <div class="mb-4">
-      <div class="civic-eyebrow mb-2">LAMPIRAN FOTO LAPANGAN</div>
-      <figure class="m-0">
-        <img src="{{ asset('storage/'.$r->image_path) }}" alt="Foto dokumentasi kejadian" class="img-fluid rounded border" style="max-height: 380px; border-color: var(--color-border-subtle) !important;">
-      </figure>
+      <div class="fw-bold small text-muted mb-2">FOTO LAMPIRAN KEJADIAN:</div>
+      <img src="{{ asset('storage/'.$r->image_path) }}" alt="Foto kejadian" class="img-fluid rounded border shadow-sm" style="max-height: 320px; border-color: var(--color-border-card) !important;">
     </div>
   @endif
 
-  <!-- Adjudication Decision Form -->
-  <div class="pt-4 border-top" style="border-color: var(--color-border-subtle) !important;">
-    <div class="civic-eyebrow mb-2">KEPUTUSAN PENGURUS RT/RW</div>
+  <!-- Verification Decision Form -->
+  <div class="pt-3 border-top" style="border-color: var(--color-border-card) !important;">
+    <h2 class="h6 fw-bold mb-3 text-dark">Keputusan Verifikasi Pengurus</h2>
+
     <form method="post" action="/admin/reports/{{ $r->id }}/status" class="row g-3 align-items-end">
       @csrf
       @method('PATCH')
 
       <div class="col-md-3">
-        <label class="civic-label">Keputusan Verifikasi</label>
-        <select name="status" class="civic-select">
-          <option value="verified" @selected($r->verification_status === 'verified')>✓ Terverifikasi (Tampilkan ke Publik)</option>
-          <option value="rejected" @selected($r->verification_status === 'rejected')>✕ Tolak (Tidak Valid)</option>
-          <option value="resolved" @selected($r->verification_status === 'resolved')>☑ Sudah Ditangani / Selesai</option>
+        <label class="form-label fw-bold small text-dark">Keputusan Status</label>
+        <select name="status" class="form-select-pill">
+          <option value="verified" @selected($r->verification_status === 'verified')>✅ Terverifikasi (Tampilkan)</option>
+          <option value="rejected" @selected($r->verification_status === 'rejected')>❌ Tolak Laporan</option>
+          <option value="resolved" @selected($r->verification_status === 'resolved')>☑ Sudah Ditangani</option>
         </select>
       </div>
 
       <div class="col-md-3">
-        <label class="civic-label">Penyesuaian Kategori</label>
-        <select name="category" class="civic-select">
-          <option value="">Pertahankan Kategori Saat Ini</option>
+        <label class="form-label fw-bold small text-dark">Penyesuaian Kategori</label>
+        <select name="category" class="form-select-pill">
+          <option value="">Biarkan Seperti Aslinya</option>
           @foreach($inc as $k => $v)
             <option value="{{ $k }}" @selected($r->category === $k)>{{ $v }}</option>
           @endforeach
@@ -101,34 +97,35 @@
       </div>
 
       <div class="col-md-4">
-        <label class="civic-label">Catatan Verifikasi</label>
-        <input name="notes" class="civic-input" placeholder="Alasan keputusan atau petunjuk penanganan...">
+        <label class="form-label fw-bold small text-dark">Catatan Tindak Lanjut</label>
+        <input name="notes" class="form-control-pill" placeholder="Opsional (catatan penanganan)...">
       </div>
 
       <div class="col-md-2">
-        <button type="submit" class="btn-civic btn-civic-primary w-100">Simpan Status</button>
+        <button type="submit" class="btn-pill btn-pill-primary w-100 py-2">
+          Simpan Status
+        </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Audit Trail Logs -->
-<div class="civic-card p-4">
-  <div class="civic-eyebrow mb-2">REKAM JEJAK VERIFIKASI</div>
-  <h2 class="h6 fw-bold mb-3">Riwayat Perubahan Berkas</h2>
+<!-- History Log -->
+<div class="app-card">
+  <div class="app-card-header mb-2">
+    <h3 class="app-card-title">Riwayat Keputusan & Perubahan</h3>
+  </div>
 
   <div class="d-flex flex-column gap-2">
     @forelse($r->logs as $l)
-      <div class="small p-2 rounded d-flex justify-content-between align-items-center flex-wrap gap-2" style="background: var(--color-surface-subtle); border: 1px solid var(--color-border-subtle);">
-        <div class="font-monospace">
-          <strong>{{ $l->created_at->translatedFormat('d M Y H:i') }}</strong>:
-          <span class="text-muted">{{ $st[$l->previous_status] ?? 'Awal' }}</span> →
-          <span class="fw-semibold text-dark">{{ $st[$l->new_status] ?? $l->new_status }}</span>
-          @if($l->notes) — <em>"{{ $l->notes }}"</em> @endif
-        </div>
+      <div class="p-2 px-3 rounded small font-monospace" style="background: var(--color-surface-subtle); border: 1px solid var(--color-border-card);">
+        <strong>{{ $l->created_at->translatedFormat('d M H:i') }}</strong>:
+        <span class="text-muted">{{ $st[$l->previous_status] ?? '-' }}</span> →
+        <span class="fw-bold text-dark">{{ $st[$l->new_status] ?? $l->new_status }}</span>
+        @if($l->notes) — <em>"{{ $l->notes }}"</em> @endif
       </div>
     @empty
-      <div class="small text-muted">Belum ada riwayat perubahan status untuk berkas ini.</div>
+      <div class="text-muted small">Belum ada riwayat perubahan status.</div>
     @endforelse
   </div>
 </div>
