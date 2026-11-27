@@ -237,4 +237,49 @@
   </div>
 
 </div>
+
+<!-- Direktori UMKM Warga (Guaranteed Full Dataset Display on Wide Screens) -->
+<div class="mt-4">
+  <div class="app-card">
+    <div class="app-card-header">
+      <h3 class="app-card-title">Direktori Usaha & Jasa Warga</h3>
+      <a href="/businesses" class="app-card-action">
+        Lihat Semua Direktori ({{ $businesses->count() }}) <span>→</span>
+      </a>
+    </div>
+
+    <div class="row g-3">
+      @forelse($businesses->take(3) as $b)
+        <div class="col-md-4">
+          <div class="p-3 rounded h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-subtle); border: 1px solid var(--color-border-card);">
+            <div>
+              <div class="rounded overflow-hidden mb-2" style="height: 100px; background: #ffffff;">
+                <img src="{{ !empty($b->image_path) ? asset('storage/'.$b->image_path) : asset('images/wargamart-mascot.png') }}" 
+                     onerror="this.onerror=null;this.src='{{ asset('images/wargamart-mascot.png') }}';" 
+                     alt="{{ $b->name }}" 
+                     class="w-100 h-100 object-fit-cover">
+              </div>
+              <div class="d-flex align-items-center justify-content-between mb-1">
+                <span class="badge-pill badge-pill-blue" style="font-size: 0.7rem;">{{ $b->category }}</span>
+                <span class="small text-muted font-monospace">Rekomendasi</span>
+              </div>
+              <div class="fw-bold text-dark mb-1" style="font-size: 0.925rem;">{{ $b->name }}</div>
+              @if($b->description)
+                <div class="small text-muted mb-2" style="line-height: 1.45;">{{ \Illuminate\Support\Str::limit($b->description, 70) }}</div>
+              @endif
+            </div>
+            <div class="pt-2 border-top small text-muted font-monospace" style="border-color: var(--color-border-subtle) !important;">
+              @if($b->address)<div class="text-truncate"><svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> {{ $b->address }}</div>@endif
+              @if($b->phone)<div><svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> {{ $b->phone }}</div>@endif
+            </div>
+          </div>
+        </div>
+      @empty
+        <div class="col-12 text-center py-4 text-muted small">
+          Belum ada unit usaha warga yang terdaftar.
+        </div>
+      @endforelse
+    </div>
+  </div>
+</div>
 @endsection

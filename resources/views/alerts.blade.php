@@ -73,7 +73,7 @@
   </div>
 </div>
 
-<!-- Interactive Geolocation Incident Map -->
+<!-- Interactive Geolocation Incident Map with Guaranteed Width & Full Container View -->
 <div class="app-card mb-4 p-3">
   <div class="app-card-header mb-2">
     <h2 class="app-card-title">Peta Titik Kejadian Aktif</h2>
@@ -169,17 +169,38 @@
 
 @push('js')
 <script>
-  const m = L.map('map').setView([-6.9, 107.0], 11);
+  const m = L.map('map', {
+    scrollWheelZoom: true
+  }).setView([-6.9, 107.0], 11);
+
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
   }).addTo(m);
 
+  const incidentMarkers = [];
   @foreach($community as $r)
     @if($r->latitude && $r->longitude)
-      L.marker([{{ $r->latitude }}, {{ $r->longitude }}])
+      const mk_{{ $r->id }} = L.marker([{{ $r->latitude }}, {{ $r->longitude }}])
         .addTo(m)
         .bindPopup("<strong>{{ addslashes($r->title) }}</strong><br><small>{{ addslashes($r->location) }}</small>");
+      incidentMarkers.push([{{ $r->latitude }}, {{ $r->longitude }}]);
     @endif
   @endforeach
+
+  if (incidentMarkers.length > 0) {
+    m.fitBounds(incidentMarkers, { padding: [40, 40], maxZoom: 14 });
+  }
+
+  // Multi-pass resize invalidation to ensure Leaflet renders flawlessly on desktop/wide screens
+  function refreshMap() {
+    if (typeof m !== 'undefined' && m) {
+      m.invalidateSize(true);
+    }
+  }
+  setTimeout(refreshMap, 100);
+  setTimeout(refreshMap, 300);
+  setTimeout(refreshMap, 700);
+  window.addEventListener('resize', refreshMap);
+  window.addEventListener('load', refreshMap);
 </script>
 @endpush

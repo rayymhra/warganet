@@ -118,7 +118,9 @@
 
 @push('js')
 <script>
-  const peta = L.map('map').setView([-6.9, 107.0], 12);
+  const peta = L.map('map', {
+    scrollWheelZoom: true
+  }).setView([-6.9, 107.0], 12);
   let pin = null, manual = false;
 
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -219,5 +221,17 @@
   @if(old('latitude') && old('longitude'))
     taruh({{ (float) old('latitude') }}, {{ (float) old('longitude') }}, null, 15);
   @endif
+
+  // Refresh map rendering for flex containers on wide screens
+  function refreshPeta() {
+    if (typeof peta !== 'undefined' && peta) {
+      peta.invalidateSize(true);
+    }
+  }
+  setTimeout(refreshPeta, 100);
+  setTimeout(refreshPeta, 300);
+  setTimeout(refreshPeta, 700);
+  window.addEventListener('resize', refreshPeta);
+  window.addEventListener('load', refreshPeta);
 </script>
 @endpush

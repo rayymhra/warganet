@@ -58,7 +58,7 @@
       --color-warning-bg: #fef3c7;
       --color-warning-text: #92400e;
 
-      /* Geometry & Shadows from Reference */
+      /* Geometry & Shadows */
       --radius-sm: 0.6rem;
       --radius-md: 0.85rem;
       --radius-lg: 1.25rem;
@@ -123,16 +123,18 @@
       display: flex;
       flex-direction: column;
       padding: 1rem;
+      width: 100%;
     }
 
     @media (min-width: 992px) {
       .app-window-shell {
         padding: 1.25rem 2rem 2rem;
-        max-width: 1480px;
+        max-width: 1600px;
         margin: 0 auto;
       }
     }
 
+    /* Frame Card with Natural Overflow for Full Data Visibility */
     .app-frame-card {
       background: var(--color-surface);
       border-radius: var(--radius-lg);
@@ -140,11 +142,12 @@
       box-shadow: var(--shadow-app);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
       flex-grow: 1;
+      width: 100%;
+      position: relative;
     }
 
-    /* Window Header Titlebar (Desktop App Style from Reference) */
+    /* Window Header Titlebar */
     .app-titlebar {
       background: var(--color-surface-subtle);
       border-bottom: 1px solid var(--color-border-subtle);
@@ -153,6 +156,8 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
+      border-top-left-radius: var(--radius-lg);
+      border-top-right-radius: var(--radius-lg);
     }
 
     .window-controls-dots {
@@ -176,11 +181,13 @@
       display: flex;
       flex-direction: column;
       flex-grow: 1;
+      width: 100%;
     }
 
     @media (min-width: 992px) {
       .app-body-layout {
         flex-direction: row;
+        align-items: stretch;
       }
     }
 
@@ -200,7 +207,6 @@
       .app-sidebar {
         width: 260px;
         flex-shrink: 0;
-        min-height: calc(100vh - 120px);
       }
     }
 
@@ -228,7 +234,7 @@
       justify-content: center;
     }
 
-    /* Sidebar Navigation Links (Active Pill State) */
+    /* Sidebar Navigation Links */
     .sidebar-nav-group {
       display: flex;
       flex-direction: column;
@@ -297,21 +303,22 @@
       font-family: var(--font-display);
     }
 
-    /* Main Viewport Content Area */
+    /* Main Viewport Content Area with Full Natural Height Flow */
     .app-main-content {
-      flex-grow: 1;
+      flex: 1 1 auto;
       background: var(--color-surface-subtle);
-      padding: 1.25rem 1.25rem 2rem;
+      padding: 1.25rem 1.25rem 2.5rem;
       min-width: 0;
+      width: 100%;
     }
 
     @media (min-width: 992px) {
       .app-main-content {
-        padding: 1.75rem 2rem 2.5rem;
+        padding: 1.75rem 2rem 3rem;
       }
     }
 
-    /* Top Live Header Card (Matching Reference Hero Banner) */
+    /* Top Live Header Card */
     .hero-banner-card {
       background: linear-gradient(135deg, #ffffff 0%, #edf5fe 100%);
       border: 1px solid var(--color-border-card);
@@ -321,6 +328,7 @@
       overflow: hidden;
       box-shadow: var(--shadow-card);
       margin-bottom: 1.5rem;
+      width: 100%;
     }
 
     .hero-banner-title {
@@ -342,7 +350,7 @@
       filter: drop-shadow(0 4px 10px rgba(37, 99, 235, 0.15));
     }
 
-    /* Digital Clock Pill from Reference */
+    /* Digital Clock Pill */
     .live-clock-card {
       background: #ffffff;
       border: 1px solid var(--color-border-card);
@@ -377,7 +385,7 @@
       font-weight: 600;
     }
 
-    /* Stat Cards (Ringkasan Hari Ini) */
+    /* Stat Cards */
     .stat-pill-card {
       background: var(--color-surface);
       border: 1px solid var(--color-border-card);
@@ -390,6 +398,7 @@
       text-align: center;
       transition: transform 0.15s ease, box-shadow 0.15s ease;
       height: 100%;
+      width: 100%;
     }
 
     .stat-pill-card:hover {
@@ -424,14 +433,15 @@
       color: var(--color-text-muted);
     }
 
-    /* Soft Rounded Section Cards */
+    /* Soft Rounded Section Cards (Fixed: No unconditional height:100% to prevent wide-screen clipping) */
     .app-card {
       background: var(--color-surface);
       border: 1px solid var(--color-border-card);
       border-radius: var(--radius-card);
       box-shadow: var(--shadow-card);
       padding: 1.25rem 1.5rem;
-      height: 100%;
+      width: 100%;
+      position: relative;
     }
 
     .app-card-header {
@@ -526,7 +536,7 @@
       font-size: 0.785rem;
     }
 
-    /* Status Pills from Reference */
+    /* Status Pills */
     .badge-pill {
       display: inline-flex;
       align-items: center;
@@ -558,7 +568,7 @@
       color: var(--color-urgent-text);
     }
 
-    /* Filter Pill Tabs from Reference */
+    /* Filter Pill Tabs */
     .filter-pills-row {
       display: flex;
       align-items: center;
@@ -596,7 +606,7 @@
       box-shadow: 0 3px 10px rgba(37, 99, 235, 0.2);
     }
 
-    /* Forms with Rounded Styling */
+    /* Forms */
     .form-control-pill, .form-select-pill {
       background: #ffffff;
       border: 1px solid var(--color-border-card);
@@ -630,10 +640,23 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
+    /* Leaflet Map Styling (Guaranteed Visibility & Stacking on Wide Devices) */
     #map {
-      height: 340px;
+      width: 100% !important;
+      height: 380px !important;
+      min-height: 380px !important;
+      position: relative !important;
+      z-index: 1 !important;
       border-radius: var(--radius-md);
       border: 1px solid var(--color-border-card);
+      display: block !important;
+      box-sizing: border-box !important;
+    }
+
+    .leaflet-container {
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 1 !important;
     }
 
     /* Admin Sub-nav Tab Bar */
@@ -734,7 +757,7 @@
         </div>
       </header>
 
-      <!-- App Body Layout: Sidebar + Main Content -->
+      <!-- App Body Layout: Sidebar + Canvas -->
       <div class="app-body-layout">
         
         <!-- Left Sidebar Navigation -->
@@ -796,7 +819,7 @@
                     </a>
                     <a href="/resident/dashboard" class="sidebar-nav-link {{ request()->is('resident/dashboard') ? 'active' : '' }}">
                       <span class="nav-icon">
-                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
                       </span>
                       <span>Laporan Saya</span>
                     </a>
@@ -824,7 +847,7 @@
           </div>
         </aside>
 
-        <!-- Main Viewport Canvas -->
+        <!-- Main Viewport Content Area -->
         <main class="app-main-content">
           @if(session('ok'))
             <div class="app-alert app-alert-success">
@@ -881,6 +904,12 @@
     }
     updateClock();
     setInterval(updateClock, 1000);
+
+    // Global Leaflet Size Invalidation Helper on Window Resize
+    window.addEventListener('resize', function() {
+      if (typeof m !== 'undefined' && m) { m.invalidateSize(true); }
+      if (typeof peta !== 'undefined' && peta) { peta.invalidateSize(true); }
+    });
   </script>
   @stack('js')
 </body>
